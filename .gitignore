@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+weights_run19/
+weights_xgb_v2/
+weights_xgb/
+weights_run18/
+weights_lgb_v2/
+weights_april_calib/
+submission_*.csv
+SUBMIT_*.csv
+/data/
+*.cbm
+*.json.bak
+.DS_Store

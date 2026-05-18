@@ -1,0 +1,69 @@
+seed: 42
+n_turbines: 26
+
+# Пути к данным (изменить при необходимости)
+train_path: "../data_extracted/dataset/train_dataset.csv"
+valid_path: "../data_extracted/dataset/valid_features.csv"
+extra_path: "../data_extracted/dataset/test_dataset.csv"
+turbine_capacity_mw: 3.465
+installed_capacity_mw: 90.09  # 26 * 3.465
+hub_height_m: 80
+wind_dir_scale: 1000.0  # multiply raw direction by this to get degrees
+
+# Resource limits
+n_threads: 8  # ~50% load; use -1 for max speed
+
+# Training
+target_col: "Выработка. Результирующий расчет"
+datetime_col: "METEOFORECASTHOUR_OPENM_Datetime"
+repair_col: "Кол-во_ВЭУ_в_ремонте"
+cf_clip_max: 1.05  # clip CF targets above this
+
+# Validation split: last N months held out locally
+holdout_months: 3
+
+# Model weights for ensemble
+lgb_weight: 0.40
+cb_weight: 0.40
+xgb_weight: 0.20
+
+# LightGBM
+lgb:
+  objective: regression_l1
+  metric: mae
+  n_estimators: 5000
+  learning_rate: 0.020
+  num_leaves: 400
+  max_depth: 10
+  min_child_samples: 15
+  feature_fraction: 0.75
+  bagging_fraction: 0.75
+  bagging_freq: 1
+  reg_alpha: 0.05
+  reg_lambda: 0.05
+  early_stopping_rounds: 200
+  verbose: -1
+
+# CatBoost
+cb:
+  iterations: 5000
+  learning_rate: 0.020
+  depth: 10
+  loss_function: MAE
+  eval_metric: MAE
+  early_stopping_rounds: 200
+  verbose: 0
+
+# XGBoost
+xgb:
+  n_estimators: 5000
+  learning_rate: 0.020
+  max_depth: 10
+  min_child_weight: 15
+  subsample: 0.75
+  colsample_bytree: 0.75
+  reg_alpha: 0.05
+  reg_lambda: 0.05
+  objective: reg:absoluteerror
+  early_stopping_rounds: 200
+  verbosity: 0
